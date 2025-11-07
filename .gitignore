@@ -1,0 +1,29 @@
+# Entornos virtuales
+env/
+venv/
+.venv/
+
+# Archivos de datos generados por la app
+videos_descargados/
+playlist.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
