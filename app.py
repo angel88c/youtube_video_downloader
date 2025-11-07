@@ -92,14 +92,18 @@ st.set_page_config(
     layout="wide"
 )
 
+# Inicializar session state
+if 'video_descargado' not in st.session_state:
+    st.session_state.video_descargado = None
+
 st.title("🎥 Descargador de Videos de YouTube HD")
 
 # Advertencia para Streamlit Cloud
 if IS_CLOUD:
-    st.warning("""
-    ⚠️ **Nota importante sobre el despliegue en Cloud:**
-    Los videos descargados se almacenan temporalmente y se eliminarán cuando la app se reinicie.
-    Esta aplicación funciona mejor ejecutándose localmente en tu computadora.
+    st.info("""
+    ☁️ **Modo Cloud Activado:**
+    Los videos se descargarán directamente a tu computadora usando el botón "Descargar a mi PC".
+    La playlist es temporal y se limpiará al reiniciar la aplicación.
     """)
 
 st.markdown("---")
@@ -140,11 +144,11 @@ if boton_descargar and url:
                 if not any(v['url'] == url for v in playlist):
                     playlist.append(video_info)
                     guardar_playlist(playlist)
-                    st.success(f"✅ Video descargado: {video_info['titulo']}")
-                else:
-                    st.info("ℹ️ Este video ya está en tu playlist")
                 
                 progreso_placeholder.empty()
+                
+                # Guardar en session state para descarga automática
+                st.session_state.video_descargado = video_info
                 st.rerun()
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
@@ -152,6 +156,36 @@ if boton_descargar and url:
         st.error("❌ Por favor ingresa una URL válida de YouTube")
 elif boton_descargar:
     st.warning("⚠️ Por favor ingresa una URL")
+
+# Mostrar botón de descarga si hay un video recién descargado
+if st.session_state.video_descargado:
+    video = st.session_state.video_descargado
+    ruta_video = VIDEOS_DIR / video['archivo']
+    
+    if ruta_video.exists():
+        st.success(f"✅ Video descargado: {video['titulo']}")
+        
+        col1, col2, col3 = st.columns([2, 1, 1])
+        
+        with col1:
+            st.info(f"📊 Duración: {formatear_duracion(video['duracion'])} | Tamaño: {ruta_video.stat().st_size / (1024 * 1024):.2f} MB")
+        
+        with col2:
+            with open(ruta_video, 'rb') as f:
+                if st.download_button(
+                    label="💾 Descargar a mi PC",
+                    data=f,
+                    file_name=video['archivo'],
+                    mime='video/mp4',
+                    type="primary",
+                    use_container_width=True
+                ):
+                    st.balloons()
+        
+        with col3:
+            if st.button("✅ Listo", use_container_width=True):
+                st.session_state.video_descargado = None
+                st.rerun()
 
 st.markdown("---")
 

@@ -5,11 +5,13 @@ Una aplicación simple y elegante desarrollada con Streamlit que te permite desc
 ## ✨ Características
 
 - **Descarga en HD**: Descarga videos en la mejor calidad disponible (hasta 1080p)
+- **Descarga Directa al Navegador**: Descarga automática a tu carpeta de Descargas
 - **Playlist Local**: Gestiona todos tus videos descargados en una lista de reproducción
 - **Interfaz Intuitiva**: UI moderna y fácil de usar construida con Streamlit
 - **Gestión de Videos**: Elimina o exporta videos fácilmente
 - **Información Detallada**: Visualiza duración, tamaño, fecha de descarga y miniaturas
 - **Barra de Progreso**: Seguimiento en tiempo real de las descargas
+- **Compatible con Cloud**: Funciona perfectamente en Streamlit Cloud
 
 ## 📋 Requisitos Previos
 
@@ -40,6 +42,8 @@ Una aplicación simple y elegante desarrollada con Streamlit que te permite desc
 2. Pégala en el campo de texto
 3. Haz clic en el botón "⬇️ Descargar"
 4. Espera a que se complete la descarga
+5. Haz clic en "💾 Descargar a mi PC" para guardar el video en tu computadora
+6. El video se guardará automáticamente en tu carpeta de Descargas
 
 ### Gestionar tu Playlist
 
@@ -79,6 +83,15 @@ PLAYLIST_FILE = Path("playlist.json")
 - La calidad máxima es 1080p (Full HD)
 - Se requiere conexión a internet para descargar videos
 - El tamaño de los archivos varía según la duración y calidad del video
+- En despliegue cloud, los videos se descargan directamente al navegador
+
+## ☁️ Uso en Streamlit Cloud
+
+La aplicación está optimizada para funcionar en Streamlit Community Cloud:
+- Los videos se procesan temporalmente en el servidor
+- Después de descargar, usa el botón "Descargar a mi PC" para guardar el video
+- La playlist se limpia automáticamente al reiniciar la app
+- No requiere almacenamiento persistente en el servidor
 
 ## ⚠️ Advertencias
 
